@@ -32,6 +32,12 @@ Express serves the built client and API together on port `3001`. Set `PORT` to u
 
 The app uses a single demo user named `demo`; it does not include authentication or a live-user database. Profile photos are loaded from Random User and need an internet connection. The profiles and interactions are mock data for demonstration purposes.
 
+## Deploy to Vercel
+
+The project is set up for Vercel's Express runtime. The build copies Vite's output to `public/` so Vercel can serve the client from its CDN, while the root `index.js` exposes the Express API. `public/` is generated during the build and is not committed.
+
+On Vercel, swipe and match state is held in the running function's memory. It can reset when Vercel replaces or restarts that function. Local runs continue to save state in `data/db.json`.
+
 ## API
 
 ### `GET /feed`
@@ -86,4 +92,3 @@ vite.config.js       Development server and API proxy
 ## Reset the demo
 
 Stop the app, then remove `data/db.json`. It will be recreated with an empty swipe and match history the next time the API starts.
-
