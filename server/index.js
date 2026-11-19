@@ -86,9 +86,13 @@ app.get('/matches', async (_req, res, next) => {
   } catch (error) { next(error); }
 });
 
-if (!onVercel && existsSync(path.join(clientDir, 'index.html'))) {
-  app.use(express.static(clientDir));
-  app.get('*', (_req, res) => res.sendFile(path.join(clientDir, 'index.html')));
+if (existsSync(path.join(clientDir, 'index.html'))) {
+  if (onVercel) {
+    app.get('/', (_req, res, next) => res.sendFile(path.join(clientDir, 'index.html'), (error) => error && next(error)));
+  } else {
+    app.use(express.static(clientDir));
+    app.get('*', (_req, res) => res.sendFile(path.join(clientDir, 'index.html')));
+  }
 }
 app.use((_req, res) => res.status(404).json({ error: 'Route not found.' }));
 app.use((error, _req, res, _next) => {
