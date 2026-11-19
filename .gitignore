@@ -1,6 +1,5 @@
 node_modules/
 dist/
-public/
 data/db.json
 .DS_Store
 .qodo/

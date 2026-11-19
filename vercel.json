@@ -1,8 +1,9 @@
 {
-  "framework": "express",
-  "functions": {
-    "index.js": {
-      "includeFiles": "dist/**"
-    }
-  }
+  "framework": "vite",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/feed", "destination": "/api/index?path=/feed" },
+    { "source": "/swipe", "destination": "/api/index?path=/swipe" },
+    { "source": "/matches", "destination": "/api/index?path=/matches" }
+  ]
 }
