@@ -11,10 +11,13 @@ const port = process.env.PORT || 3001;
 const dataDir = path.join(__dirname, '..', 'data');
 const dbPath = path.join(dataDir, 'db.json');
 const clientDir = path.join(__dirname, '..', 'dist');
+const onVercel = process.env.VERCEL === '1';
+let serverlessDb = { swipes: {}, matches: [] };
 
 app.use(express.json());
 
 async function readDb() {
+  if (onVercel) return serverlessDb;
   try {
     return JSON.parse(await readFile(dbPath, 'utf8'));
   } catch (error) {
@@ -26,6 +29,10 @@ async function readDb() {
 }
 
 async function saveDb(db) {
+  if (onVercel) {
+    serverlessDb = db;
+    return;
+  }
   await mkdir(dataDir, { recursive: true });
   await writeFile(dbPath, `${JSON.stringify(db, null, 2)}\n`);
 }
@@ -79,7 +86,7 @@ app.get('/matches', async (_req, res, next) => {
   } catch (error) { next(error); }
 });
 
-if (existsSync(path.join(clientDir, 'index.html'))) {
+if (!onVercel && existsSync(path.join(clientDir, 'index.html'))) {
   app.use(express.static(clientDir));
   app.get('*', (_req, res) => res.sendFile(path.join(clientDir, 'index.html')));
 }
@@ -89,5 +96,6 @@ app.use((error, _req, res, _next) => {
   res.status(500).json({ error: 'Something went wrong.' });
 });
 
-app.listen(port, () => console.log(`Coy Discover API running on http://localhost:${port}`));
+if (!onVercel) app.listen(port, () => console.log(`Coy Discover API running on http://localhost:${port}`));
 
+export default app;
