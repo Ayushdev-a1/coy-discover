@@ -1,0 +1,7 @@
+node_modules/
+dist/
+data/db.json
+.DS_Store
+.qodo/
+*.pdf
+
