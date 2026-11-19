@@ -34,7 +34,7 @@ The app uses a single demo user named `demo`; it does not include authentication
 
 ## Deploy to Vercel
 
-The project is set up for Vercel's Express runtime. The build copies Vite's output to `public/` so Vercel can serve the client from its CDN, while the root `index.js` exposes the Express API. `public/` is generated during the build and is not committed.
+The project is set up for Vercel's Express runtime. The build copies Vite's output to `public/` for its static assets, while the root `index.js` exposes Express. The root page is served by Express from the included Vite `dist/` output. Both build directories are generated and not committed.
 
 On Vercel, swipe and match state is held in the running function's memory. It can reset when Vercel replaces or restarts that function. Local runs continue to save state in `data/db.json`.
 
